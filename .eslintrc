@@ -10,18 +10,6 @@
     "sourceType": "module"
   },
   "rules": {
-    "prettier/prettier": "error",
-    "no-console": 2
-  },
-  "overrides": [
-    {
-      "files": ["**/test/**/*.test.js"],
-      "rules": {
-        "prettier/prettier": "error"
-      },
-      "env": {
-        "mocha": true
-      }
-    }
-  ]
+    "prettier/prettier": "error"
+  }
 }

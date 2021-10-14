@@ -1,25 +1,70 @@
-# wasp-service-template
+# Apollo type validation plugin
 
-Template repository for bootstrapping new WASP services. Use this repo as a template in github when creating new `WASP` services. When forked a new pull request will automatically be created in the new repository to apply templating. Before merging you should also give access to the forked repo the `GITHUB_TOKEN` organisation secret prior to merging. This will allow the release workflow to run successfully on merging.
+A library for performing directive based validations against input values passed in a GraphQL query.
 
-## What this repo provides
+## Usage
 
-This repo provides:
+The library can be used to instantiate an Apollo server plugin which can be configured to perform the required validation checks. For example:
 
-- basic node.js project structure for a WASP service
-- linting with WASP prettier configuration
-- open-sourcing materials
-- Docker file
-- A simple helm chart for the service
-- A service with a healthcheck endpoint on `/health`
-- Testing apparatus using `mocha`, `chai` and `supertest`
-- Github workflows for testing and release
+```js
+const { ApolloServer } = require('apollo-server')
+const {
+  plugin: typeValidationPlugin,
+  directives: { arrayLengthDirective },
+} = require('@digicatapult/apollo-type-validation-plugin')
 
-## Environment Variables
+const typeDefs = ...
+const resolvers = ...
 
-`wasp-service-template` is configured primarily using environment variables as follows:
+const server = new ApolloServer({
+    schema,
+    // build a plugin to get the complexity of a query before running the resolvers
+    // allows us to set a max complexity per query, or meter rate-limiting by complexity
+    plugins: [typeValidationPlugin({ schema, directives: [arrayLengthDirective()] })],
+})
+```
 
-| variable  | required | default | description                                                                          |
-| :-------- | :------: | :-----: | :----------------------------------------------------------------------------------- |
-| LOG_LEVEL |    N     | `info`  | Logging level. Valid values are [`trace`, `debug`, `info`, `warn`, `error`, `fatal`] |
-| PORT      |    N     |  `80`   | Port on which the service will listen                                                |
+A worked example using the `arrayLengthDirective` can be found [here](./example).
+
+## Supported Directives
+
+The following directives are currently supported:
+
+### `maxArrayLength`
+
+A directive used to limit the maximum size of an input array that can be passed as part of an argument. For example:
+
+```graphql
+# directive definition used by arrayLengthDirective
+directive @maxArrayLength(length: Int!) on ARGUMENT_DEFINITION | INPUT_FIELD_DEFINITION
+
+type Query {
+  echo(values: [Int!]! @maxArrayLength(length: 5)): [Echo!]!
+}
+
+type Echo {
+  value: Int!
+  times(number: [Int!]! @maxArrayLength(length: 2)): [Int!]!
+}
+```
+
+In this schema the maximum number of elements that can be validly passed as `values` to the field `echo` is 5 whilst the maximum number that can be passed to `number` on the field `times` is 2.
+
+### `boundedInteger`
+
+A directive used to bound the value of an integer that can be passed as an argument. For example:
+
+```graphql
+# directive definition used by boundedIntegerDirective
+directive @boundedInteger(min: Int!, max: Int!) on ARGUMENT_DEFINITION | INPUT_FIELD_DEFINITION
+
+type Query {
+  echo(input: Int! @boundedInteger(min: 5, max: 10)): Echo!
+}
+
+type Echo {
+  value: Int!
+}
+```
+
+In this schema the value that can be validly passed as `input` to the field `echo` must be greater than or equal to 5 and less than or equal to 10.

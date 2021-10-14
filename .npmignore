@@ -1,7 +1,5 @@
 .github
-.nyc_output
-coverage
-node_modules
+example
 scripts
 test
 
@@ -9,4 +7,3 @@ test
 .eslintrc
 .nycrc
 .prettierrc
-*.md
