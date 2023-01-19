@@ -1,8 +1,8 @@
 import { ApolloServer } from '@apollo/server'
 import gql from 'graphql-tag'
-import { makeExecutableSchema } from 'graphql-tools'
+import { makeExecutableSchema } from '@graphql-tools/schema'
 
-import src from '../src'
+import src from '../src/index.js'
 const {
   plugin: typeValidationPlugin,
   directives: { arrayLengthDirective },

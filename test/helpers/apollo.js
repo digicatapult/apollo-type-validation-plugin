@@ -4,7 +4,7 @@ import { expressMiddleware } from '@apollo/server/express4'
 import request from 'supertest'
 import cors from 'cors'
 
-import { makeExecutableSchema } from 'graphql-tools'
+import { makeExecutableSchema } from '@graphql-tools/schema'
 
 import src from '../../src/index.js'
 
