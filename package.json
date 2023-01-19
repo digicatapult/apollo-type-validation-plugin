@@ -27,21 +27,21 @@
   "type": "module",
   "peerDependencies": {
     "@apollo/server": "^4.3.0",
-    "cors": "^2.8.5",
-    "graphql": "^14.0.0 || ^15.0.0",
-    "graphql-tag": "^2.12.6"
+    "graphql": "^16.0.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.19.1",
     "@graphql-tools/schema": "^9.0.13",
     "c8": "^7.12.0",
     "chai": "^4.3.7",
+    "cors": "^2.8.5",
     "depcheck": "^1.4.3",
     "eslint": "^8.32.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-prettier": "^4.2.1",
     "express": "^4.18.2",
     "graphql": "^16.6.0",
+    "graphql-tag": "^2.12.6",
     "mocha": "^10.2.0",
     "nodemon": "^2.0.20",
     "prettier": "^2.8.3",
