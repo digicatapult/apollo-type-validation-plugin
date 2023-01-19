@@ -1,7 +1,7 @@
-const simple = require('./simple')
-const renamedDirective = require('./renamedDirective')
-const nestedValues = require('./nestedValues')
-const customInputTypes = require('./customInputTypes')
-const mutation = require('./mutation')
+import simple from './simple.js'
+import renamedDirective from './renamedDirective.js'
+import nestedValues from './nestedValues.js'
+import customInputTypes from './customInputTypes.js'
+import mutation from './mutation.js'
 
-module.exports = { simple, renamedDirective, nestedValues, customInputTypes, mutation }
+export { simple, renamedDirective, nestedValues, customInputTypes, mutation }

@@ -5,11 +5,23 @@
     "es6": true,
     "node": true
   },
+  "parser": "@babel/eslint-parser",
   "parserOptions": {
-    "ecmaVersion": 9,
-    "sourceType": "module"
+    "requireConfigFile": false,
   },
   "rules": {
-    "prettier/prettier": "error"
-  }
+    "prettier/prettier": "error",
+    "no-console": 2
+  },
+  "overrides": [
+    {
+      "files": ["**/test/**/*.test.js"],
+      "rules": {
+        "prettier/prettier": "error"
+      },
+      "env": {
+        "mocha": true
+      }
+    }
+  ]
 }

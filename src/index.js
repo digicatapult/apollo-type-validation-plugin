@@ -1,9 +1,9 @@
-const directives = require('./directives')
-const { separateOperations, isListType, isNonNullType, isInputObjectType } = require('graphql')
+import directives from './directives/index.js'
+import { separateOperations, isListType, isNonNullType, isInputObjectType } from 'graphql'
 
-const { getArgumentValues } = require('graphql/execution/values')
+import { getArgumentValues } from 'graphql/execution/values.js'
 
-const { TypeInfo, visit, visitWithTypeInfo } = require('graphql')
+import { TypeInfo, visit, visitWithTypeInfo } from 'graphql'
 
 const plugin = ({ schema, directives }) => {
   const unwrapArray = ({ type, values }) => {
@@ -118,7 +118,7 @@ const plugin = ({ schema, directives }) => {
   }
 }
 
-module.exports = {
+export default {
   directives,
   plugin,
 }

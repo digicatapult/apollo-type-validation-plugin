@@ -1,6 +1,6 @@
 {
   "name": "@digicatapult/apollo-type-validation-plugin",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "description": "Type validation plugin for Apollo GraphQL server",
   "main": "src/index.js",
   "repository": {
@@ -8,7 +8,7 @@
     "url": "git+https://github.com/digicatapult/apollo-type-validation-plugin.git"
   },
   "engines": {
-    "node": ">=14.16.0"
+    "node": ">=18.13.0"
   },
   "keywords": [
     "apollo",
@@ -16,33 +16,35 @@
     "plugin"
   ],
   "scripts": {
-    "test": "NODE_ENV=test mocha --config ./test/mocharc.js ./test",
-    "coverage": "nyc npm run test",
+    "test": "NODE_ENV=test mocha --config ./test/mocharc.json ./test",
+    "coverage": "c8 npm run test",
     "example": "nodemon example/index.js",
     "lint": "eslint .",
     "depcheck": "depcheck"
   },
   "author": "Digital Catapult",
   "license": "Apache-2.0",
+  "type": "module",
   "peerDependencies": {
-    "apollo-server-core": "^2.18.0",
-    "graphql": "^14.0.0 || ^15.0.0"
+    "@apollo/server": "^4.3.0",
+    "cors": "^2.8.5",
+    "graphql": "^14.0.0 || ^15.0.0",
+    "graphql-tag": "^2.12.6"
   },
   "devDependencies": {
-    "apollo-server-core": "^2.18.2",
-    "apollo-server-express": "^2.18.2",
-    "chai": "^4.2.0",
-    "depcheck": "^1.2.0",
-    "eslint": "^7.12.1",
-    "eslint-config-prettier": "^6.15.0",
-    "eslint-plugin-prettier": "^3.1.4",
-    "express": "^4.17.1",
-    "graphql": "^15.4.0",
-    "graphql-tools": "^7.0.1",
-    "mocha": "^8.2.0",
-    "nodemon": "^2.0.6",
-    "nyc": "^15.1.0",
-    "prettier": "^2.1.2",
-    "supertest": "^6.0.0"
+    "@babel/eslint-parser": "^7.19.1",
+    "c8": "^7.12.0",
+    "chai": "^4.3.7",
+    "depcheck": "^1.4.3",
+    "eslint": "^8.32.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "express": "^4.18.2",
+    "graphql": "^16.6.0",
+    "graphql-tools": "^8.3.15",
+    "mocha": "^10.2.0",
+    "nodemon": "^2.0.20",
+    "prettier": "^2.8.3",
+    "supertest": "^6.3.3"
   }
 }

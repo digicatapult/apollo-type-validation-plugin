@@ -1,7 +1,7 @@
-const arrayLengthDirective = require('./arrayLengthDirective')
-const boundedIntegerDirective = require('./boundedIntegerDirective')
+import arrayLengthDirective from './arrayLengthDirective.js'
+import boundedIntegerDirective from './boundedIntegerDirective.js'
 
-module.exports = {
+export default {
   arrayLengthDirective,
   boundedIntegerDirective,
 }

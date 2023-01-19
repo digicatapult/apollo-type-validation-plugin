@@ -1,4 +1,4 @@
-const { gql } = require('apollo-server-express')
+import gql from 'graphql-tag'
 
 // Apollo type-defs SDL
 const typeDefs = gql`
@@ -36,4 +36,4 @@ const resolvers = {
   },
 }
 
-module.exports = { typeDefs, resolvers }
+export default { typeDefs, resolvers }
