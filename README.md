@@ -7,11 +7,13 @@ A library for performing directive based validations against input values passed
 The library can be used to instantiate an Apollo server plugin which can be configured to perform the required validation checks. For example:
 
 ```js
-const { ApolloServer } = require('apollo-server')
+import { ApolloServer } from '@apollo/server'
+import validationPlugin from '@digicatapult/apollo-type-validation-plugin'
+
 const {
   plugin: typeValidationPlugin,
   directives: { arrayLengthDirective },
-} = require('@digicatapult/apollo-type-validation-plugin')
+} = validationPlugin
 
 const typeDefs = ...
 const resolvers = ...
@@ -21,6 +23,7 @@ const server = new ApolloServer({
     // build a plugin to get the complexity of a query before running the resolvers
     // allows us to set a max complexity per query, or meter rate-limiting by complexity
     plugins: [typeValidationPlugin({ schema, directives: [arrayLengthDirective()] })],
+    allowBatchedHttpRequests: true
 })
 ```
 

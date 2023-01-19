@@ -1,10 +1,10 @@
-const { getDirectiveValues, GraphQLInt, GraphQLNonNull } = require('graphql')
-const { GraphQLDirective } = require('graphql/type/directives')
-const { DirectiveLocation } = require('graphql/language/directiveLocation')
+import { getDirectiveValues, GraphQLInt, GraphQLNonNull } from 'graphql'
+import { GraphQLDirective } from 'graphql/type/directives.js'
+import { DirectiveLocation } from 'graphql/language/directiveLocation.js'
+import { ApolloServerErrorCode } from '@apollo/server/errors'
+import { GraphQLError } from 'graphql'
 
-const { UserInputError } = require('apollo-server-core')
-
-module.exports = function mkBoundedIntegerDirective(options) {
+export default function mkBoundedIntegerDirective(options) {
   const mergedOptions = {
     name: 'boundedInteger',
     ...(options || {}),
@@ -40,14 +40,24 @@ module.exports = function mkBoundedIntegerDirective(options) {
       } else {
         // max check
         if (value > directiveValue.max) {
-          throw new UserInputError(
-            `Invalid value for argument ${field.name}. ${value} is greater than ${directiveValue.max}`
+          throw new GraphQLError(
+            `Invalid value for argument ${field.name}. ${value} is greater than ${directiveValue.max}`,
+            {
+              extensions: {
+                code: ApolloServerErrorCode.BAD_USER_INPUT,
+              },
+            }
           )
         }
         // min check
         if (value < directiveValue.min) {
-          throw new UserInputError(
-            `Invalid value for argument ${field.name}. ${value} is less than ${directiveValue.min}`
+          throw new GraphQLError(
+            `Invalid value for argument ${field.name}. ${value} is less than ${directiveValue.min}`,
+            {
+              extensions: {
+                code: ApolloServerErrorCode.BAD_USER_INPUT,
+              },
+            }
           )
         }
       }

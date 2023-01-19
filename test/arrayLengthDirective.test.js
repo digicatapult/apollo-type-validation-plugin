@@ -1,50 +1,54 @@
-const { describe, before, it } = require('mocha')
-const { expect } = require('chai')
+import { describe, before, it } from 'mocha'
+import { expect } from 'chai'
 
-const { arrayLengthDirective } = require('../src/directives')
+import directives from '../src/directives/index.js'
 
-const {
+import {
   simple,
   renamedDirective,
   nestedValues,
   customInputTypes,
   mutation,
-} = require('./helpers/schema/arrayLengthDirective')
-const createApolloServer = require('./helpers/apollo')
+} from './helpers/schema/arrayLengthDirective/index.js'
+import createApolloServer from './helpers/apollo.js'
 
-const mkTest = ({ schema, directiveOpts }) => ({ description, query, variables = {}, result, error }) => {
-  describe(description, function () {
-    let context = {}
-    before(async function () {
-      const api = createApolloServer({
-        ...schema,
-        directives: [arrayLengthDirective(directiveOpts)],
+const { arrayLengthDirective } = directives
+
+const mkTest =
+  ({ schema, directiveOpts }) =>
+  ({ description, query, variables = {}, result, error }) => {
+    describe(description, function () {
+      let context = {}
+      before(async function () {
+        const api = await createApolloServer({
+          ...schema,
+          directives: [arrayLengthDirective(directiveOpts)],
+        })
+
+        try {
+          context.result =
+            (await api.query({
+              query,
+              variables,
+            })) || true
+        } catch (err) {
+          context.error = err || true
+        }
       })
 
-      try {
-        context.result =
-          (await api.query({
-            query,
-            variables,
-          })) || true
-      } catch (err) {
-        context.error = err || true
+      if (result) {
+        it('should succeed', function () {
+          expect(context.result).to.deep.equal(result)
+          expect(context.error).to.equal(undefined)
+        })
+      } else {
+        it('should fail', function () {
+          expect(context.result).to.equal(undefined)
+          expect(context.error).to.deep.equal(error)
+        })
       }
     })
-
-    if (result) {
-      it('should succeed', function () {
-        expect(context.result).to.deep.equal(result)
-        expect(context.error).to.equal(undefined)
-      })
-    } else {
-      it('should fail', function () {
-        expect(context.result).to.equal(undefined)
-        expect(context.error).to.deep.equal(error)
-      })
-    }
-  })
-}
+  }
 
 const mkSimpleTest = mkTest({ schema: simple })
 const mkRenamedDirectiveTest = mkTest({ schema: renamedDirective, directiveOpts: { name: 'maxArrayLen' } })
@@ -415,7 +419,7 @@ describe('arrayLengthDirectiveTest', function () {
   describe('multiple operations', function () {
     let context = {}
     before(async function () {
-      const server = createApolloServer({
+      const server = await createApolloServer({
         ...customInputTypes,
         directives: [arrayLengthDirective()],
       })
@@ -459,6 +463,7 @@ describe('arrayLengthDirectiveTest', function () {
     })
 
     it('should succeed', function () {
+      console.log(context.result)
       expect(context.result.length).to.equal(2)
       const result1 = context.result[0]
       const result2 = context.result[1]
@@ -477,7 +482,7 @@ describe('arrayLengthDirectiveTest', function () {
   describe('multiple operations single error', function () {
     let context = {}
     before(async function () {
-      const server = createApolloServer({
+      const server = await createApolloServer({
         ...customInputTypes,
         directives: [arrayLengthDirective()],
       })

@@ -1,50 +1,54 @@
-const { describe, before, it } = require('mocha')
-const { expect } = require('chai')
+import { describe, before, it } from 'mocha'
+import { expect } from 'chai'
 
-const { boundedIntegerDirective } = require('../src/directives')
+import directives from '../src/directives/index.js'
 
-const {
+import {
   simple,
   renamedDirective,
   nestedValues,
   customInputTypes,
   mutation,
-} = require('./helpers/schema/boundedIntegerDirective')
-const createApolloServer = require('./helpers/apollo')
+} from './helpers/schema/boundedIntegerDirective/index.js'
+import createApolloServer from './helpers/apollo.js'
 
-const mkTest = ({ schema, directiveOpts }) => ({ description, query, variables = {}, result, error }) => {
-  describe(description, function () {
-    let context = {}
-    before(async function () {
-      const api = createApolloServer({
-        ...schema,
-        directives: [boundedIntegerDirective(directiveOpts)],
+const { boundedIntegerDirective } = directives
+
+const mkTest =
+  ({ schema, directiveOpts }) =>
+  ({ description, query, variables = {}, result, error }) => {
+    describe(description, function () {
+      let context = {}
+      before(async function () {
+        const api = await createApolloServer({
+          ...schema,
+          directives: [boundedIntegerDirective(directiveOpts)],
+        })
+
+        try {
+          context.result =
+            (await api.query({
+              query,
+              variables,
+            })) || true
+        } catch (err) {
+          context.error = err || true
+        }
       })
 
-      try {
-        context.result =
-          (await api.query({
-            query,
-            variables,
-          })) || true
-      } catch (err) {
-        context.error = err || true
+      if (result) {
+        it('should succeed', function () {
+          expect(context.error).to.equal(undefined)
+          expect(context.result).to.deep.equal(result)
+        })
+      } else {
+        it('should fail', function () {
+          expect(context.result).to.equal(undefined)
+          expect(context.error).to.deep.equal(error)
+        })
       }
     })
-
-    if (result) {
-      it('should succeed', function () {
-        expect(context.error).to.equal(undefined)
-        expect(context.result).to.deep.equal(result)
-      })
-    } else {
-      it('should fail', function () {
-        expect(context.result).to.equal(undefined)
-        expect(context.error).to.deep.equal(error)
-      })
-    }
-  })
-}
+  }
 
 const mkSimpleTest = mkTest({ schema: simple })
 const mkRenamedDirectiveTest = mkTest({ schema: renamedDirective, directiveOpts: { name: 'maxArrayLen' } })

@@ -1,10 +1,12 @@
-const { ApolloServer, gql } = require('apollo-server-express')
-const { makeExecutableSchema } = require('graphql-tools')
+import { ApolloServer } from '@apollo/server'
+import gql from 'graphql-tag'
+import { makeExecutableSchema } from '@graphql-tools/schema'
 
+import src from '../src/index.js'
 const {
   plugin: typeValidationPlugin,
   directives: { arrayLengthDirective },
-} = require('../src')
+} = src
 
 // Apollo type-defs SDL
 const typeDefs = gql`
@@ -45,9 +47,10 @@ function createApolloServer() {
     schema,
     // build a plugin that performs type validation using the arrayLengthDirective
     plugins: [typeValidationPlugin({ schema, directives: [arrayLengthDirective()] })],
+    allowBatchedHttpRequests: true,
   })
 
   return server
 }
 
-module.exports = createApolloServer
+export default createApolloServer

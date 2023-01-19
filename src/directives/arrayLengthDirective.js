@@ -1,10 +1,10 @@
-const { getDirectiveValues, GraphQLInt, GraphQLNonNull } = require('graphql')
-const { GraphQLDirective } = require('graphql/type/directives')
-const { DirectiveLocation } = require('graphql/language/directiveLocation')
+import { getDirectiveValues, GraphQLInt, GraphQLNonNull } from 'graphql'
+import { GraphQLDirective } from 'graphql/type/directives.js'
+import { DirectiveLocation } from 'graphql/language/directiveLocation.js'
+import { ApolloServerErrorCode } from '@apollo/server/errors'
+import { GraphQLError } from 'graphql'
 
-const { UserInputError } = require('apollo-server-core')
-
-module.exports = function mkArrayLengthDirective(options) {
+export default function mkArrayLengthDirective(options) {
   const mergedOptions = {
     name: 'maxArrayLength',
     ...(options || {}),
@@ -36,8 +36,13 @@ module.exports = function mkArrayLengthDirective(options) {
       } else {
         // length check
         if (value.length > directiveValue.length) {
-          throw new UserInputError(
-            `Invalid array length for argument ${field.name}. Supplied ${value.length} items, maximum allowed is ${directiveValue.length}`
+          throw new GraphQLError(
+            `Invalid array length for argument ${field.name}. Supplied ${value.length} items, maximum allowed is ${directiveValue.length}`,
+            {
+              extensions: {
+                code: ApolloServerErrorCode.BAD_USER_INPUT,
+              },
+            }
           )
         }
       }
