@@ -13,8 +13,8 @@ jobs:
     steps:
       - name: Check npmjs token
         run: |
-          if [ -z "${{ secrets.NPM_TOKEN }}"]; then
-            echo "Must provide a NPM_TOKEN secret in order to run release workflow"
+          if [ -z "${{ secrets.NPMJS_TOKEN }}"]; then
+            echo "Must provide a NPMJS_TOKEN secret in order to run release workflow"
             exit 1
           fi
 
@@ -162,4 +162,4 @@ jobs:
       - name: Publish to npmjs packages
         run: npm publish --access public
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPMJS_TOKEN }}
