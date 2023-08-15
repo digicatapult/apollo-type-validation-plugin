@@ -1,6 +1,6 @@
 {
   "name": "@digicatapult/apollo-type-validation-plugin",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "Type validation plugin for Apollo GraphQL server",
   "main": "src/index.js",
   "repository": {
@@ -44,7 +44,7 @@
     "graphql-tag": "^2.12.6",
     "mocha": "^10.2.0",
     "nodemon": "^3.0.0",
-    "prettier": "^2.8.3",
+    "prettier": "^3.0.0",
     "supertest": "^6.3.3"
   }
 }
