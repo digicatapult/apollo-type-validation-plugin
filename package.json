@@ -1,6 +1,6 @@
 {
   "name": "@digicatapult/apollo-type-validation-plugin",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "description": "Type validation plugin for Apollo GraphQL server",
   "main": "src/index.js",
   "repository": {
@@ -33,7 +33,7 @@
     "@babel/eslint-parser": "^7.22.15",
     "@graphql-tools/schema": "^10.0.0",
     "c8": "^8.0.1",
-    "chai": "^4.3.8",
+    "chai": "^4.3.9",
     "cors": "^2.8.5",
     "depcheck": "^1.4.6",
     "eslint": "^8.50.0",
