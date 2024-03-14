@@ -1,5 +1,9 @@
 # Apollo type validation plugin
 
+## Deprecation Notice
+This application was deprecated on March 14th 2024, there will be no further dependency or security updates.
+---
+
 A library for performing directive based validations against input values passed in a GraphQL query.
 
 ## Usage
